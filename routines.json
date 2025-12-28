@@ -1,297 +1,479 @@
 [
   {
     "id": 1,
-    "title": "45 Min Tabata Ride",
-    "description": "High intensity interval training with 20-second all-out efforts",
-    "intensity": "red",
+    "title": "Ride 1 — Z2 Steady",
+    "description": "High cadence endurance ride (45 min)",
+    "intensity": "green",
     "segments": [
       {
-        "phase": "Warm Up",
-        "duration": 300,
-        "color": "#4CAF50",
-        "instruction": "Easy pace, get your legs moving, resistance low"
-      },
-      {
-        "phase": "Build",
-        "duration": 180,
-        "color": "#8BC34A",
-        "instruction": "Gradually increase resistance, cadence 80 to 90"
-      },
-      {
-        "phase": "Tabata Sprint 1",
-        "duration": 20,
-        "color": "#F44336",
-        "instruction": "All out effort, maximum resistance and speed"
-      },
-      {
-        "phase": "Recovery",
-        "duration": 40,
-        "color": "#4CAF50",
-        "instruction": "Easy spin, catch your breath"
-      },
-      {
-        "phase": "Tabata Sprint 2",
-        "duration": 20,
-        "color": "#F44336",
-        "instruction": "Push hard, dig deep"
-      },
-      {
-        "phase": "Recovery",
-        "duration": 40,
-        "color": "#4CAF50",
-        "instruction": "Recover, shake out your legs"
-      },
-      {
-        "phase": "Tabata Sprint 3",
-        "duration": 20,
-        "color": "#F44336",
-        "instruction": "Maximum effort, you can do this"
-      },
-      {
-        "phase": "Recovery",
-        "duration": 40,
-        "color": "#4CAF50",
-        "instruction": "Easy spin"
-      },
-      {
-        "phase": "Tabata Sprint 4",
-        "duration": 20,
-        "color": "#F44336",
-        "instruction": "Final sprint of this set, leave it all out there"
-      },
-      {
-        "phase": "Active Recovery",
-        "duration": 120,
-        "color": "#8BC34A",
-        "instruction": "Light resistance, cadence 70 to 80"
-      },
-      {
-        "phase": "Climb",
-        "duration": 300,
-        "color": "#FF9800",
-        "instruction": "High resistance, out of saddle, cadence 60 to 70"
-      },
-      {
-        "phase": "Flat Road Push",
+        "phase": "Z1 → Z2 Ramp",
         "duration": 240,
-        "color": "#FF9800",
-        "instruction": "Medium resistance, in saddle, cadence 90 to 100"
+        "color": "#4CAF50",
+        "instruction": "Smooth ramp from Z1 to mid-Z2, easy breathing"
       },
       {
-        "phase": "Tabata Sprint 5",
+        "phase": "Z3 Low",
+        "duration": 120,
+        "color": "#FFC107",
+        "instruction": "Comfortable Z3, not grinding, just above Z2"
+      },
+      {
+        "phase": "Z5 Prime",
         "duration": 20,
         "color": "#F44336",
-        "instruction": "All out sprint"
+        "instruction": "Cadence up, resistance only enough to reach Z5, do not sprint or stand"
       },
       {
-        "phase": "Recovery",
-        "duration": 40,
+        "phase": "Z1 Recovery",
+        "duration": 30,
+        "color": "#4CAF50",
+        "instruction": "Easy spin, recover"
+      },
+      {
+        "phase": "Z5 Prime",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Cadence up, reach Z5, stay seated"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 30,
+        "color": "#4CAF50",
+        "instruction": "Easy spin, recover"
+      },
+      {
+        "phase": "Z5 Prime",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Final prime, cadence up to Z5"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 30,
         "color": "#4CAF50",
         "instruction": "Easy spin"
       },
       {
-        "phase": "Tabata Sprint 6",
-        "duration": 20,
-        "color": "#F44336",
-        "instruction": "Maximum power"
+        "phase": "Z2 Settle",
+        "duration": 150,
+        "color": "#8BC34A",
+        "instruction": "Settle breathing in Z2, feel ready not cooked"
       },
       {
-        "phase": "Recovery",
-        "duration": 40,
-        "color": "#4CAF50",
-        "instruction": "Recover"
+        "phase": "Z2 Steady",
+        "duration": 1860,
+        "color": "#8BC34A",
+        "instruction": "High cadence Z2, smooth and controlled, repeatable effort"
       },
       {
-        "phase": "Tabata Sprint 7",
-        "duration": 20,
-        "color": "#F44336",
-        "instruction": "Push through the burn"
-      },
-      {
-        "phase": "Recovery",
-        "duration": 40,
-        "color": "#4CAF50",
-        "instruction": "Easy spin"
-      },
-      {
-        "phase": "Tabata Sprint 8",
-        "duration": 20,
-        "color": "#F44336",
-        "instruction": "Final sprint, give everything"
-      },
-      {
-        "phase": "Cool Down",
-        "duration": 300,
-        "color": "#4CAF50",
-        "instruction": "Easy pace, let your heart rate come down"
-      },
-      {
-        "phase": "Stretch",
+        "phase": "Z1 Cooldown",
         "duration": 180,
-        "color": "#2196F3",
-        "instruction": "Light spin, prepare to stretch off the bike"
+        "color": "#4CAF50",
+        "instruction": "Easy spin, bring heart rate down"
       }
     ]
   },
   {
     "id": 2,
-    "title": "30 Min Power Zone Endurance",
-    "description": "Steady state training in Zone 3",
+    "title": "Ride 2 — Z2 with Z3 Lifts",
+    "description": "Z2 base with Z3 intervals to boost kJ without burn (45 min)",
     "intensity": "yellow",
     "segments": [
       {
-        "phase": "Warm Up",
-        "duration": 300,
-        "color": "#4CAF50",
-        "instruction": "Easy pace, Zone 1 to Zone 2"
-      },
-      {
-        "phase": "Zone 3 Block 1",
-        "duration": 600,
-        "color": "#FF9800",
-        "instruction": "Power Zone 3, cadence 85 to 95"
-      },
-      {
-        "phase": "Recovery",
-        "duration": 120,
-        "color": "#4CAF50",
-        "instruction": "Zone 1, easy spin"
-      },
-      {
-        "phase": "Zone 3 Block 2",
-        "duration": 600,
-        "color": "#FF9800",
-        "instruction": "Power Zone 3, stay consistent"
-      },
-      {
-        "phase": "Recovery",
-        "duration": 120,
-        "color": "#4CAF50",
-        "instruction": "Zone 1, recover"
-      },
-      {
-        "phase": "Zone 3 Block 3",
-        "duration": 420,
-        "color": "#FF9800",
-        "instruction": "Power Zone 3, focus on form"
-      },
-      {
-        "phase": "Cool Down",
+        "phase": "Z1 → Z2 Ramp",
         "duration": 240,
         "color": "#4CAF50",
-        "instruction": "Zone 1, easy pace"
+        "instruction": "Smooth ramp from Z1 to mid-Z2"
+      },
+      {
+        "phase": "Z3 Low",
+        "duration": 120,
+        "color": "#FFC107",
+        "instruction": "Comfortable Z3, not grinding"
+      },
+      {
+        "phase": "Z5 Prime",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Cadence up to Z5, stay seated"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 30,
+        "color": "#4CAF50",
+        "instruction": "Easy spin"
+      },
+      {
+        "phase": "Z5 Prime",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Cadence up to Z5"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 30,
+        "color": "#4CAF50",
+        "instruction": "Easy spin"
+      },
+      {
+        "phase": "Z5 Prime",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Final prime to Z5"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 30,
+        "color": "#4CAF50",
+        "instruction": "Easy spin"
+      },
+      {
+        "phase": "Z2 Settle",
+        "duration": 150,
+        "color": "#8BC34A",
+        "instruction": "Settle in Z2, ready to work"
+      },
+      {
+        "phase": "Z3 Low Block 1",
+        "duration": 360,
+        "color": "#FFC107",
+        "instruction": "Z3 low, comfortable tempo, not sweet spot grind"
+      },
+      {
+        "phase": "Z2 Recovery",
+        "duration": 240,
+        "color": "#8BC34A",
+        "instruction": "Z2 recovery between lifts"
+      },
+      {
+        "phase": "Z3 Low Block 2",
+        "duration": 360,
+        "color": "#FFC107",
+        "instruction": "Z3 low, stay comfortable"
+      },
+      {
+        "phase": "Z2 Recovery",
+        "duration": 240,
+        "color": "#8BC34A",
+        "instruction": "Z2 recovery"
+      },
+      {
+        "phase": "Z3 Low Block 3",
+        "duration": 360,
+        "color": "#FFC107",
+        "instruction": "Final Z3 block, maintain form"
+      },
+      {
+        "phase": "Z2 Recovery",
+        "duration": 240,
+        "color": "#8BC34A",
+        "instruction": "Z2 recovery"
+      },
+      {
+        "phase": "Z2 Finish",
+        "duration": 60,
+        "color": "#8BC34A",
+        "instruction": "Final minute Z2"
+      },
+      {
+        "phase": "Z1 Cooldown",
+        "duration": 180,
+        "color": "#4CAF50",
+        "instruction": "Easy cooldown spin"
       }
     ]
   },
   {
     "id": 3,
-    "title": "20 Min HIIT & Hills",
-    "description": "Quick high intensity workout with climbing intervals",
-    "intensity": "red",
+    "title": "Ride 3 — Z2 Steady",
+    "description": "Repeatable volume ride (45 min)",
+    "intensity": "green",
     "segments": [
       {
-        "phase": "Warm Up",
-        "duration": 180,
+        "phase": "Z1 → Z2 Ramp",
+        "duration": 240,
         "color": "#4CAF50",
-        "instruction": "Easy pace, get ready to work"
+        "instruction": "Smooth ramp to mid-Z2"
       },
       {
-        "phase": "Hill Climb 1",
+        "phase": "Z3 Low",
         "duration": 120,
-        "color": "#FF5722",
-        "instruction": "High resistance, out of saddle, power up"
+        "color": "#FFC107",
+        "instruction": "Comfortable Z3"
       },
       {
-        "phase": "Recovery",
-        "duration": 60,
+        "phase": "Z5 Prime",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Cadence up to Z5, seated"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 30,
         "color": "#4CAF50",
         "instruction": "Easy spin"
       },
       {
-        "phase": "Sprint",
-        "duration": 30,
+        "phase": "Z5 Prime",
+        "duration": 20,
         "color": "#F44336",
-        "instruction": "All out effort"
+        "instruction": "Cadence to Z5"
       },
       {
-        "phase": "Recovery",
+        "phase": "Z1 Recovery",
         "duration": 30,
-        "color": "#4CAF50",
-        "instruction": "Catch your breath"
-      },
-      {
-        "phase": "Hill Climb 2",
-        "duration": 120,
-        "color": "#FF5722",
-        "instruction": "Heavy resistance, seated climb"
-      },
-      {
-        "phase": "Recovery",
-        "duration": 60,
         "color": "#4CAF50",
         "instruction": "Easy spin"
       },
       {
-        "phase": "Sprint",
-        "duration": 30,
+        "phase": "Z5 Prime",
+        "duration": 20,
         "color": "#F44336",
-        "instruction": "Maximum power"
+        "instruction": "Final prime to Z5"
       },
       {
-        "phase": "Recovery",
+        "phase": "Z1 Recovery",
         "duration": 30,
         "color": "#4CAF50",
-        "instruction": "Recover"
+        "instruction": "Easy spin"
       },
       {
-        "phase": "Hill Climb 3",
-        "duration": 120,
-        "color": "#FF5722",
-        "instruction": "Final climb, push through"
+        "phase": "Z2 Settle",
+        "duration": 150,
+        "color": "#8BC34A",
+        "instruction": "Settle breathing in Z2"
       },
       {
-        "phase": "Cool Down",
+        "phase": "Z2 Steady",
+        "duration": 1860,
+        "color": "#8BC34A",
+        "instruction": "Steady Z2, repeatable volume, smooth pedaling"
+      },
+      {
+        "phase": "Z1 Cooldown",
         "duration": 180,
         "color": "#4CAF50",
-        "instruction": "Easy pace, well done"
+        "instruction": "Easy cooldown"
       }
     ]
   },
   {
     "id": 4,
-    "title": "15 Min Beginner Ride",
-    "description": "Easy introduction to indoor cycling",
+    "title": "Ride 4 — VO₂ Builder",
+    "description": "Only hard day - controlled VO₂ max intervals (45 min)",
+    "intensity": "red",
+    "segments": [
+      {
+        "phase": "Z1 → Z2 Ramp",
+        "duration": 240,
+        "color": "#4CAF50",
+        "instruction": "Smooth ramp to mid-Z2"
+      },
+      {
+        "phase": "Z3 Low",
+        "duration": 120,
+        "color": "#FFC107",
+        "instruction": "Comfortable Z3"
+      },
+      {
+        "phase": "Z5 Prime",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Cadence up to Z5, seated"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 30,
+        "color": "#4CAF50",
+        "instruction": "Easy spin"
+      },
+      {
+        "phase": "Z5 Prime",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Cadence to Z5"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 30,
+        "color": "#4CAF50",
+        "instruction": "Easy spin"
+      },
+      {
+        "phase": "Z5 Prime",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Final prime to Z5"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 30,
+        "color": "#4CAF50",
+        "instruction": "Easy spin"
+      },
+      {
+        "phase": "Z2 Settle",
+        "duration": 150,
+        "color": "#8BC34A",
+        "instruction": "Settle in Z2, prepare for hard work"
+      },
+      {
+        "phase": "Z5 Interval 1",
+        "duration": 120,
+        "color": "#F44336",
+        "instruction": "2 minutes Z5, controlled hard effort"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 120,
+        "color": "#4CAF50",
+        "instruction": "2 minutes Z1, full recovery"
+      },
+      {
+        "phase": "Z5 Interval 2",
+        "duration": 120,
+        "color": "#F44336",
+        "instruction": "2 minutes Z5, maintain form"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 120,
+        "color": "#4CAF50",
+        "instruction": "2 minutes Z1 recovery"
+      },
+      {
+        "phase": "Z5 Interval 3",
+        "duration": 120,
+        "color": "#F44336",
+        "instruction": "2 minutes Z5, dig deep"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 120,
+        "color": "#4CAF50",
+        "instruction": "2 minutes Z1 recovery"
+      },
+      {
+        "phase": "Z5 Interval 4",
+        "duration": 120,
+        "color": "#F44336",
+        "instruction": "2 minutes Z5, you got this"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 120,
+        "color": "#4CAF50",
+        "instruction": "2 minutes Z1 recovery"
+      },
+      {
+        "phase": "Z5 Interval 5",
+        "duration": 120,
+        "color": "#F44336",
+        "instruction": "2 minutes Z5, stay strong"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 120,
+        "color": "#4CAF50",
+        "instruction": "2 minutes Z1 recovery"
+      },
+      {
+        "phase": "Z5 Interval 6",
+        "duration": 120,
+        "color": "#F44336",
+        "instruction": "Final 2 minutes Z5, leave it all out there"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 120,
+        "color": "#4CAF50",
+        "instruction": "2 minutes Z1 recovery"
+      },
+      {
+        "phase": "Z2 Finish",
+        "duration": 420,
+        "color": "#8BC34A",
+        "instruction": "7 minutes Z2, bring it home"
+      },
+      {
+        "phase": "Z1 Cooldown",
+        "duration": 180,
+        "color": "#4CAF50",
+        "instruction": "Easy cooldown, well done"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Ride 5 — Z2 Steady",
+    "description": "Recovery and appetite protection (45 min)",
     "intensity": "green",
     "segments": [
       {
-        "phase": "Warm Up",
+        "phase": "Z1 → Z2 Ramp",
         "duration": 240,
         "color": "#4CAF50",
-        "instruction": "Very easy pace, find your rhythm"
+        "instruction": "Smooth ramp to mid-Z2"
       },
       {
-        "phase": "Moderate Effort",
-        "duration": 180,
-        "color": "#8BC34A",
-        "instruction": "Increase resistance slightly, cadence 75 to 85"
-      },
-      {
-        "phase": "Easy Spin",
+        "phase": "Z3 Low",
         "duration": 120,
-        "color": "#4CAF50",
-        "instruction": "Back to easy pace"
+        "color": "#FFC107",
+        "instruction": "Comfortable Z3"
       },
       {
-        "phase": "Moderate Effort",
-        "duration": 180,
+        "phase": "Z5 Prime",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Cadence up to Z5, seated"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 30,
+        "color": "#4CAF50",
+        "instruction": "Easy spin"
+      },
+      {
+        "phase": "Z5 Prime",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Cadence to Z5"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 30,
+        "color": "#4CAF50",
+        "instruction": "Easy spin"
+      },
+      {
+        "phase": "Z5 Prime",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Final prime to Z5"
+      },
+      {
+        "phase": "Z1 Recovery",
+        "duration": 30,
+        "color": "#4CAF50",
+        "instruction": "Easy spin"
+      },
+      {
+        "phase": "Z2 Settle",
+        "duration": 150,
         "color": "#8BC34A",
-        "instruction": "Increase resistance again, maintain cadence"
+        "instruction": "Settle in Z2"
       },
       {
-        "phase": "Cool Down",
+        "phase": "Z2 Steady",
+        "duration": 1860,
+        "color": "#8BC34A",
+        "instruction": "Steady Z2, protect recovery, stay comfortable"
+      },
+      {
+        "phase": "Z1 Cooldown",
         "duration": 180,
         "color": "#4CAF50",
-        "instruction": "Easy pace, great job"
+        "instruction": "Easy cooldown"
       }
     ]
   }

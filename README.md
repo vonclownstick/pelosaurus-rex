@@ -1,11 +1,18 @@
-# Peloton Workout Assistant
+# Pelosaurus Rex 🦖
 
-A mobile-first web application that acts as an automated cycling coach, guiding users through interval workouts with large visual timers, workout timeline visualization, and Text-to-Speech audio cues.
+A mobile-first web application that acts as an automated cycling coach, guiding users through power zone interval workouts with large visual timers, workout timeline visualization, and Text-to-Speech audio cues.
 
 ## Features
 
 - **PIN-based authentication** - Secure keypad login
-- **Multiple workout routines** - Tabata, Power Zone, HIIT & Hills, and beginner rides
+- **5 Structured Rides** - Week Plan A (polarized training approach)
+  - Ride 1: Z2 Steady (high cadence)
+  - Ride 2: Z2 with Z3 Lifts
+  - Ride 3: Z2 Steady (repeatable volume)
+  - Ride 4: VO₂ Builder (only hard day)
+  - Ride 5: Z2 Steady (recovery protection)
+- **Prominent zone display** - Current zone (Z1-Z5) clearly visible during intervals
+- **Standard warm-up protocol** - 11-minute progressive warm-up with priming set
 - **Large timer display** - Readable from distance during workout
 - **Visual timeline** - Color-coded segments showing workout structure
 - **Text-to-Speech coaching** - Audio cues for zone changes, warnings, and countdowns
@@ -60,7 +67,7 @@ git push -u origin main
 2. Click **New +** → **Web Service**
 3. Connect your GitHub repository
 4. Configure the service:
-   - **Name:** `peloton-workout-assistant` (or your choice)
+   - **Name:** `pelosaurus-rex` (or your choice)
    - **Runtime:** `Python 3`
    - **Build Command:** `pip install -r requirements.txt`
    - **Start Command:** `uvicorn main:app --host 0.0.0.0 --port $PORT`
@@ -77,32 +84,39 @@ git push -u origin main
 
 ## Customizing Workouts
 
-Edit `routines.json` to add or modify workouts:
+Edit `routines.json` to add or modify workouts. Each ride follows the standard warm-up protocol:
 
 ```json
 {
-  "id": 5,
-  "title": "Your Custom Workout",
-  "description": "Description of the workout",
-  "intensity": "green",
+  "id": 6,
+  "title": "Ride 6 — Custom Workout",
+  "description": "Your custom workout (45 min)",
+  "intensity": "yellow",
   "segments": [
     {
-      "phase": "Warm Up",
-      "duration": 300,
-      "color": "#4CAF50",
-      "instruction": "Easy pace, get ready to work"
+      "phase": "Z2 Steady",
+      "duration": 1860,
+      "color": "#8BC34A",
+      "instruction": "Your custom instructions here"
     }
   ]
 }
 ```
 
+**Power Zone Colors:**
+- Z1 (Recovery): `#4CAF50` (light green)
+- Z2 (Endurance): `#8BC34A` (green)
+- Z3 (Tempo): `#FFC107` (yellow)
+- Z4 (Threshold): `#FF9800` (orange)
+- Z5 (VO₂ max): `#F44336` (red)
+
 After editing, commit and push to GitHub - Render will auto-deploy.
 
 ## Intensity Levels
 
-- **Green:** Easy/Beginner workouts
-- **Yellow:** Moderate/Endurance workouts
-- **Red:** Hard/High-intensity workouts
+- **Green:** Easy/Z2 workouts
+- **Yellow:** Moderate/Z3 workouts
+- **Red:** Hard/Z4-Z5 workouts
 
 ## Browser Compatibility
 
