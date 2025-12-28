@@ -1,0 +1,298 @@
+[
+  {
+    "id": 1,
+    "title": "45 Min Tabata Ride",
+    "description": "High intensity interval training with 20-second all-out efforts",
+    "intensity": "red",
+    "segments": [
+      {
+        "phase": "Warm Up",
+        "duration": 300,
+        "color": "#4CAF50",
+        "instruction": "Easy pace, get your legs moving, resistance low"
+      },
+      {
+        "phase": "Build",
+        "duration": 180,
+        "color": "#8BC34A",
+        "instruction": "Gradually increase resistance, cadence 80 to 90"
+      },
+      {
+        "phase": "Tabata Sprint 1",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "All out effort, maximum resistance and speed"
+      },
+      {
+        "phase": "Recovery",
+        "duration": 40,
+        "color": "#4CAF50",
+        "instruction": "Easy spin, catch your breath"
+      },
+      {
+        "phase": "Tabata Sprint 2",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Push hard, dig deep"
+      },
+      {
+        "phase": "Recovery",
+        "duration": 40,
+        "color": "#4CAF50",
+        "instruction": "Recover, shake out your legs"
+      },
+      {
+        "phase": "Tabata Sprint 3",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Maximum effort, you can do this"
+      },
+      {
+        "phase": "Recovery",
+        "duration": 40,
+        "color": "#4CAF50",
+        "instruction": "Easy spin"
+      },
+      {
+        "phase": "Tabata Sprint 4",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Final sprint of this set, leave it all out there"
+      },
+      {
+        "phase": "Active Recovery",
+        "duration": 120,
+        "color": "#8BC34A",
+        "instruction": "Light resistance, cadence 70 to 80"
+      },
+      {
+        "phase": "Climb",
+        "duration": 300,
+        "color": "#FF9800",
+        "instruction": "High resistance, out of saddle, cadence 60 to 70"
+      },
+      {
+        "phase": "Flat Road Push",
+        "duration": 240,
+        "color": "#FF9800",
+        "instruction": "Medium resistance, in saddle, cadence 90 to 100"
+      },
+      {
+        "phase": "Tabata Sprint 5",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "All out sprint"
+      },
+      {
+        "phase": "Recovery",
+        "duration": 40,
+        "color": "#4CAF50",
+        "instruction": "Easy spin"
+      },
+      {
+        "phase": "Tabata Sprint 6",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Maximum power"
+      },
+      {
+        "phase": "Recovery",
+        "duration": 40,
+        "color": "#4CAF50",
+        "instruction": "Recover"
+      },
+      {
+        "phase": "Tabata Sprint 7",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Push through the burn"
+      },
+      {
+        "phase": "Recovery",
+        "duration": 40,
+        "color": "#4CAF50",
+        "instruction": "Easy spin"
+      },
+      {
+        "phase": "Tabata Sprint 8",
+        "duration": 20,
+        "color": "#F44336",
+        "instruction": "Final sprint, give everything"
+      },
+      {
+        "phase": "Cool Down",
+        "duration": 300,
+        "color": "#4CAF50",
+        "instruction": "Easy pace, let your heart rate come down"
+      },
+      {
+        "phase": "Stretch",
+        "duration": 180,
+        "color": "#2196F3",
+        "instruction": "Light spin, prepare to stretch off the bike"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "30 Min Power Zone Endurance",
+    "description": "Steady state training in Zone 3",
+    "intensity": "yellow",
+    "segments": [
+      {
+        "phase": "Warm Up",
+        "duration": 300,
+        "color": "#4CAF50",
+        "instruction": "Easy pace, Zone 1 to Zone 2"
+      },
+      {
+        "phase": "Zone 3 Block 1",
+        "duration": 600,
+        "color": "#FF9800",
+        "instruction": "Power Zone 3, cadence 85 to 95"
+      },
+      {
+        "phase": "Recovery",
+        "duration": 120,
+        "color": "#4CAF50",
+        "instruction": "Zone 1, easy spin"
+      },
+      {
+        "phase": "Zone 3 Block 2",
+        "duration": 600,
+        "color": "#FF9800",
+        "instruction": "Power Zone 3, stay consistent"
+      },
+      {
+        "phase": "Recovery",
+        "duration": 120,
+        "color": "#4CAF50",
+        "instruction": "Zone 1, recover"
+      },
+      {
+        "phase": "Zone 3 Block 3",
+        "duration": 420,
+        "color": "#FF9800",
+        "instruction": "Power Zone 3, focus on form"
+      },
+      {
+        "phase": "Cool Down",
+        "duration": 240,
+        "color": "#4CAF50",
+        "instruction": "Zone 1, easy pace"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "20 Min HIIT & Hills",
+    "description": "Quick high intensity workout with climbing intervals",
+    "intensity": "red",
+    "segments": [
+      {
+        "phase": "Warm Up",
+        "duration": 180,
+        "color": "#4CAF50",
+        "instruction": "Easy pace, get ready to work"
+      },
+      {
+        "phase": "Hill Climb 1",
+        "duration": 120,
+        "color": "#FF5722",
+        "instruction": "High resistance, out of saddle, power up"
+      },
+      {
+        "phase": "Recovery",
+        "duration": 60,
+        "color": "#4CAF50",
+        "instruction": "Easy spin"
+      },
+      {
+        "phase": "Sprint",
+        "duration": 30,
+        "color": "#F44336",
+        "instruction": "All out effort"
+      },
+      {
+        "phase": "Recovery",
+        "duration": 30,
+        "color": "#4CAF50",
+        "instruction": "Catch your breath"
+      },
+      {
+        "phase": "Hill Climb 2",
+        "duration": 120,
+        "color": "#FF5722",
+        "instruction": "Heavy resistance, seated climb"
+      },
+      {
+        "phase": "Recovery",
+        "duration": 60,
+        "color": "#4CAF50",
+        "instruction": "Easy spin"
+      },
+      {
+        "phase": "Sprint",
+        "duration": 30,
+        "color": "#F44336",
+        "instruction": "Maximum power"
+      },
+      {
+        "phase": "Recovery",
+        "duration": 30,
+        "color": "#4CAF50",
+        "instruction": "Recover"
+      },
+      {
+        "phase": "Hill Climb 3",
+        "duration": 120,
+        "color": "#FF5722",
+        "instruction": "Final climb, push through"
+      },
+      {
+        "phase": "Cool Down",
+        "duration": 180,
+        "color": "#4CAF50",
+        "instruction": "Easy pace, well done"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "15 Min Beginner Ride",
+    "description": "Easy introduction to indoor cycling",
+    "intensity": "green",
+    "segments": [
+      {
+        "phase": "Warm Up",
+        "duration": 240,
+        "color": "#4CAF50",
+        "instruction": "Very easy pace, find your rhythm"
+      },
+      {
+        "phase": "Moderate Effort",
+        "duration": 180,
+        "color": "#8BC34A",
+        "instruction": "Increase resistance slightly, cadence 75 to 85"
+      },
+      {
+        "phase": "Easy Spin",
+        "duration": 120,
+        "color": "#4CAF50",
+        "instruction": "Back to easy pace"
+      },
+      {
+        "phase": "Moderate Effort",
+        "duration": 180,
+        "color": "#8BC34A",
+        "instruction": "Increase resistance again, maintain cadence"
+      },
+      {
+        "phase": "Cool Down",
+        "duration": 180,
+        "color": "#4CAF50",
+        "instruction": "Easy pace, great job"
+      }
+    ]
+  }
+]

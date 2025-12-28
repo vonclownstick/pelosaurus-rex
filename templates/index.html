@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>Peloton Workout Assistant</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- View 1: Login -->
+    <div id="view-login" class="view active">
+        <div class="login-container">
+            <h1>Workout Assistant</h1>
+            <div class="pin-display">
+                <input type="password" id="pin-input" readonly maxlength="4" placeholder="Enter PIN">
+            </div>
+            <div class="keypad">
+                <button class="key-btn" data-value="1">1</button>
+                <button class="key-btn" data-value="2">2</button>
+                <button class="key-btn" data-value="3">3</button>
+                <button class="key-btn" data-value="4">4</button>
+                <button class="key-btn" data-value="5">5</button>
+                <button class="key-btn" data-value="6">6</button>
+                <button class="key-btn" data-value="7">7</button>
+                <button class="key-btn" data-value="8">8</button>
+                <button class="key-btn" data-value="9">9</button>
+                <button class="key-btn clear" data-value="clear">C</button>
+                <button class="key-btn" data-value="0">0</button>
+                <button class="key-btn enter" data-value="enter">⏎</button>
+            </div>
+            <div id="login-error" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- View 2: Dashboard -->
+    <div id="view-dashboard" class="view">
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <h1>Choose a Workout</h1>
+                <button id="logout-btn" class="logout-btn">Logout</button>
+            </div>
+            <div id="routines-list" class="routines-list">
+                <!-- Workout cards will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- View 3: Workout -->
+    <div id="view-workout" class="view">
+        <div class="workout-container">
+            <div class="workout-header">
+                <button id="back-btn" class="back-btn">← Back</button>
+                <h2 id="workout-title">Workout</h2>
+            </div>
+
+            <div class="timer-display">
+                <div id="phase-name" class="phase-name">Ready</div>
+                <div id="timer" class="timer">00:00</div>
+                <div id="phase-instruction" class="phase-instruction"></div>
+            </div>
+
+            <div class="next-phase-container">
+                <div class="next-label">Next:</div>
+                <div id="next-phase" class="next-phase">-</div>
+            </div>
+
+            <div class="controls">
+                <button id="start-btn" class="control-btn start">Start</button>
+                <button id="pause-btn" class="control-btn pause" style="display:none;">Pause</button>
+                <button id="resume-btn" class="control-btn resume" style="display:none;">Resume</button>
+                <button id="stop-btn" class="control-btn stop" style="display:none;">Stop</button>
+            </div>
+
+            <div class="timeline-container">
+                <div id="timeline" class="timeline">
+                    <!-- Timeline segments will be dynamically inserted here -->
+                </div>
+                <div id="timeline-cursor" class="timeline-cursor"></div>
+            </div>
+
+            <div class="progress-info">
+                <span id="segment-counter">Segment 0/0</span>
+                <span id="total-progress">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

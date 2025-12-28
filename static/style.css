@@ -1,0 +1,367 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #000;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* View Management */
+.view {
+    display: none;
+    min-height: 100vh;
+}
+
+.view.active {
+    display: block;
+}
+
+/* Login View */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.login-container h1 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.pin-display {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 2rem;
+}
+
+#pin-input {
+    width: 100%;
+    padding: 1rem;
+    font-size: 2rem;
+    text-align: center;
+    background-color: #222;
+    color: #fff;
+    border: 2px solid #444;
+    border-radius: 10px;
+    letter-spacing: 0.5rem;
+}
+
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    max-width: 300px;
+    width: 100%;
+}
+
+.key-btn {
+    width: 100%;
+    height: 70px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    background-color: #333;
+    color: #fff;
+    border: 2px solid #555;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.key-btn:active {
+    background-color: #555;
+    transform: scale(0.95);
+}
+
+.key-btn.clear {
+    background-color: #d32f2f;
+}
+
+.key-btn.enter {
+    background-color: #4CAF50;
+}
+
+.error-message {
+    margin-top: 1rem;
+    color: #f44336;
+    font-size: 0.9rem;
+    min-height: 20px;
+}
+
+/* Dashboard View */
+.dashboard-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #333;
+}
+
+.dashboard-header h1 {
+    font-size: 1.8rem;
+}
+
+.logout-btn {
+    padding: 0.5rem 1.5rem;
+    background-color: #d32f2f;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.routines-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.routine-card {
+    background-color: #1a1a1a;
+    border: 3px solid;
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.routine-card:active {
+    transform: scale(0.98);
+}
+
+.routine-card.intensity-green {
+    border-color: #4CAF50;
+}
+
+.routine-card.intensity-yellow {
+    border-color: #FF9800;
+}
+
+.routine-card.intensity-red {
+    border-color: #F44336;
+}
+
+.routine-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.routine-card p {
+    color: #aaa;
+    margin-bottom: 1rem;
+}
+
+.routine-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* Workout View */
+.workout-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.workout-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.back-btn {
+    padding: 0.5rem 1rem;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+#workout-title {
+    font-size: 1.3rem;
+}
+
+.timer-display {
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.phase-name {
+    font-size: 1.5rem;
+    color: #aaa;
+    margin-bottom: 1rem;
+}
+
+.timer {
+    font-size: 15vh;
+    font-weight: bold;
+    line-height: 1;
+    margin-bottom: 1rem;
+}
+
+.phase-instruction {
+    font-size: 1.2rem;
+    color: #888;
+    padding: 0 1rem;
+}
+
+.next-phase-container {
+    text-align: center;
+    margin: 1rem 0;
+    padding: 1rem;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+}
+
+.next-label {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+}
+
+.next-phase {
+    font-size: 1.2rem;
+    color: #4CAF50;
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 1.5rem 0;
+}
+
+.control-btn {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 120px;
+}
+
+.control-btn:active {
+    transform: scale(0.95);
+}
+
+.control-btn.start {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.control-btn.pause {
+    background-color: #FF9800;
+    color: #fff;
+}
+
+.control-btn.resume {
+    background-color: #2196F3;
+    color: #fff;
+}
+
+.control-btn.stop {
+    background-color: #d32f2f;
+    color: #fff;
+}
+
+.timeline-container {
+    position: relative;
+    margin: 1.5rem 0;
+}
+
+.timeline {
+    display: flex;
+    height: 60px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #222;
+}
+
+.timeline-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.8);
+    border-right: 1px solid #000;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 4px;
+}
+
+.timeline-segment.active {
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.timeline-cursor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    transition: left 0.1s linear;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .timer {
+        font-size: 12vh;
+    }
+
+    .control-btn {
+        min-width: 100px;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+@media (min-height: 800px) {
+    .timer {
+        font-size: 20vh;
+    }
+}
