@@ -10,12 +10,26 @@ let routines = [];
 let totalDuration = 0;
 let elapsedTime = 0;
 let lastSpokenSecond = -1;
+let speechInitialized = false;
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
     initKeypad();
     initLogout();
+    initSpeechResume();
 });
+
+// Handle iOS Safari speech resumption after background/foreground
+function initSpeechResume() {
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && 'speechSynthesis' in window) {
+            // Resume speech synthesis when app comes back to foreground
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
+        }
+    });
+}
 
 // View switching
 function showView(viewId) {
@@ -215,6 +229,9 @@ function initWorkoutControls() {
 }
 
 async function startWorkout() {
+    // Prime speech synthesis (MUST be in user gesture handler for iOS)
+    primeSpeechSynthesis();
+
     // Request wake lock
     try {
         if ('wakeLock' in navigator) {
@@ -235,7 +252,7 @@ async function startWorkout() {
     document.getElementById('pause-btn').style.display = 'block';
     document.getElementById('stop-btn').style.display = 'block';
 
-    // Start first segment
+    // Start first segment (call speak directly from user gesture context)
     speak(`Starting ${currentRoutine.segments[0].phase}`);
 
     // Start timer
@@ -355,9 +372,8 @@ function handleAudioCues(remainingTime) {
         speak(`In 30 seconds, ${nextSegment.phase}`);
     }
 
-    // Final countdown
+    // Final countdown (speak() function handles cancel internally)
     if (remainingTime <= 5 && remainingTime > 0) {
-        window.speechSynthesis.cancel();
         speak(remainingTime.toString());
     }
 }
@@ -420,12 +436,45 @@ function formatTime(seconds) {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
 
+function primeSpeechSynthesis() {
+    // iOS Safari requires speech to be triggered from a user gesture
+    // This function should be called from a click handler
+    if ('speechSynthesis' in window && !speechInitialized) {
+        // Speak a short silent utterance to initialize the speech engine
+        const utterance = new SpeechSynthesisUtterance('');
+        utterance.volume = 0;
+        window.speechSynthesis.speak(utterance);
+        speechInitialized = true;
+        console.log('Speech synthesis primed for iOS');
+    }
+}
+
 function speak(text) {
     if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 1.0;
-        utterance.pitch = 1.0;
-        utterance.volume = 1.0;
-        window.speechSynthesis.speak(utterance);
+        // Cancel any ongoing speech first
+        window.speechSynthesis.cancel();
+
+        // Small delay to ensure cancel completes (iOS Safari quirk)
+        setTimeout(() => {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+
+            // iOS Safari specific settings
+            utterance.lang = 'en-US';
+
+            // Error handling for iOS
+            utterance.onerror = (event) => {
+                console.error('Speech synthesis error:', event);
+            };
+
+            utterance.onend = () => {
+                console.log('Finished speaking:', text);
+            };
+
+            window.speechSynthesis.speak(utterance);
+            console.log('Speaking:', text);
+        }, 50);
     }
 }

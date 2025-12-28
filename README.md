@@ -120,10 +120,13 @@ After editing, commit and push to GitHub - Render will auto-deploy.
 
 ## Browser Compatibility
 
-- **iOS Safari:** Fully supported (requires user interaction for TTS)
-- **Chrome (Android):** Fully supported
-- **Chrome (Desktop):** Fully supported
-- **Firefox:** Supported (Wake Lock may not work)
+- **iOS Safari (Recommended for iPhone):** ✅ Fully supported
+  - Text-to-Speech initializes automatically when you tap "Start"
+  - Wake Lock keeps screen on during workouts
+  - Works in both portrait and landscape mode
+- **Chrome (Android):** ✅ Fully supported
+- **Chrome (Desktop):** ✅ Fully supported
+- **Firefox:** ⚠️ Partial support (Wake Lock may not work, TTS supported)
 
 ## Project Structure
 
@@ -142,13 +145,23 @@ workout_app/
 ## Troubleshooting
 
 **Issue:** Can't hear audio cues on iOS
-- **Solution:** Make sure to tap the "Start" button. iOS requires user interaction to enable audio.
+- **Solution 1:** Make sure to tap the "Start" button. iOS Safari requires user interaction to enable Text-to-Speech.
+- **Solution 2:** Check that your iPhone is not in Silent Mode (check the physical switch on the side).
+- **Solution 3:** Increase your device volume - TTS respects the system volume setting.
+- **Solution 4:** Check Settings → Safari → Advanced → Experimental Features and ensure nothing is blocking Web Speech API.
+- **Note:** Audio cues are initialized when you tap "Start Workout" and will work throughout the ride.
+
+**Issue:** Audio cuts out or stops mid-workout
+- **Solution:** This is rare but can happen if iOS puts the app in background. Tap the screen to resume or pause/resume the workout.
 
 **Issue:** Screen keeps turning off during workout
-- **Solution:** Wake Lock is not supported in all browsers. Try Chrome or Safari on mobile.
+- **Solution:** Wake Lock is not supported in all browsers. Use Safari or Chrome on mobile for best results.
 
 **Issue:** Authentication fails
 - **Solution:** Check that `APP_PIN` environment variable is set correctly in Render dashboard.
+
+**Issue:** Zone changes announced but countdown is silent
+- **Solution:** This is an iOS Safari quirk. The app cancels ongoing speech before countdown to ensure numbers are heard. If you're hearing zone changes but not countdown, check volume settings.
 
 ## License
 
