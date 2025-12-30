@@ -564,22 +564,38 @@ function selectVoice() {
     const voices = window.speechSynthesis.getVoices();
     if (voices.length === 0) return;
 
-    // Priority 1: Default
-    // Priority 2: "Samantha" (iOS high quality)
-    // Priority 3: en-US + localService (low latency)
-    // Fallback: First English voice
+    console.log('Available voices:', voices.map(v => `${v.name} (${v.lang})`));
 
-    let bestVoice = voices.find(v => v.default) || 
-                   voices.find(v => v.name.includes('Samantha')) ||
-                   voices.find(v => v.lang === 'en-US' && v.localService);
+    // Priority System:
+    // 1. "Samantha" (iOS Premium/Enhanced usually)
+    // 2. "Siri" (Newer iOS voices)
+    // 3. "Daniel" (High quality UK, popular fallback)
+    // 4. Any "Enhanced" or "Premium" voice
+    // 5. System Default
+    // 6. First English Voice
 
-    if (!bestVoice) {
-        bestVoice = voices.find(v => v.lang.startsWith('en'));
-    }
+    let bestVoice = 
+        voices.find(v => v.name.includes('Samantha')) ||
+        voices.find(v => v.name.includes('Siri') && v.lang.startsWith('en')) ||
+        voices.find(v => v.name === 'Daniel') ||
+        voices.find(v => (v.name.includes('Enhanced') || v.name.includes('Premium')) && v.lang.startsWith('en')) ||
+        voices.find(v => v.default && v.lang.startsWith('en')) ||
+        voices.find(v => v.lang.startsWith('en'));
 
     selectedVoice = bestVoice || voices[0];
     console.log('Selected voice:', selectedVoice ? selectedVoice.name : 'None');
 }
+
+// Global Interaction Feedback
+document.addEventListener('click', (e) => {
+    // Check if the clicked element is a button or interactive
+    if (e.target.closest('button') || e.target.closest('.routine-card') || e.target.closest('.key-btn')) {
+        // Haptic Feedback
+        if (navigator.vibrate) {
+            navigator.vibrate(15); // Short, sharp tick
+        }
+    }
+});
 
 function primeSpeechSynthesis() {
     // iOS Safari requires speech to be triggered from a user gesture
