@@ -6,25 +6,71 @@ let startTime = null;
 let pauseTimestamp = null;
 let isPaused = false;
 let wakeLock = null;
+let noSleep = null;
 let routines = [];
 let totalDuration = 0;
 let elapsedTime = 0;
 let lastSpokenSecond = -1;
 let speechInitialized = false;
+let selectedVoice = null;
+
+// Constants
+const PIN_EXPIRY_DAYS = 7;
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize NoSleep
+    if (typeof NoSleep !== 'undefined') {
+        noSleep = new NoSleep();
+    }
+
+    // Check auth
+    if (checkAuth()) {
+        loadDashboard();
+    } else {
+        showView('view-login');
+    }
+    
     initKeypad();
     initLogout();
     initSpeechResume();
+    
+    // Wait for voices to load
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = selectVoice;
+    }
 });
 
-// Handle iOS Safari speech resumption after background/foreground
+function checkAuth() {
+    try {
+        const authData = JSON.parse(localStorage.getItem('auth_token'));
+        if (authData && authData.expiry > Date.now()) {
+            return true;
+        }
+    } catch (e) {
+        console.error('Auth check failed:', e);
+    }
+    return false;
+}
+
+// Handle iOS Safari speech resumption and display catch-up
 function initSpeechResume() {
-    document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && 'speechSynthesis' in window) {
-            // Resume speech synthesis when app comes back to foreground
-            if (window.speechSynthesis.paused) {
+    document.addEventListener('visibilitychange', async () => {
+        if (!document.hidden) {
+            // Force display update to snap to correct time
+            if (timerInterval && !isPaused) {
+                updateDisplay();
+            }
+
+            // Re-request wake lock
+            if (!wakeLock && 'wakeLock' in navigator) {
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                } catch (e) { console.log('Wake lock re-request failed', e); }
+            }
+
+            // Resume speech
+            if ('speechSynthesis' in window && window.speechSynthesis.paused) {
                 window.speechSynthesis.resume();
             }
         }
@@ -78,6 +124,10 @@ function initKeypad() {
             });
 
             if (response.ok) {
+                // Store auth token
+                const expiry = Date.now() + (PIN_EXPIRY_DAYS * 24 * 60 * 60 * 1000);
+                localStorage.setItem('auth_token', JSON.stringify({ expiry: expiry }));
+
                 pin = '';
                 pinInput.value = '';
                 errorMsg.textContent = '';
@@ -111,12 +161,26 @@ function renderRoutines() {
     const container = document.getElementById('routines-list');
     container.innerHTML = '';
 
+    // Get history
+    let history = {};
+    try {
+        history = JSON.parse(localStorage.getItem('workout_history') || '{}');
+    } catch (e) {
+        console.error('History parse error', e);
+    }
+
     routines.forEach(routine => {
         const card = document.createElement('div');
         card.className = `routine-card intensity-${routine.intensity}`;
 
         const totalSeconds = routine.segments.reduce((sum, seg) => sum + seg.duration, 0);
         const minutes = Math.floor(totalSeconds / 60);
+
+        // Check history
+        let historyHtml = '';
+        if (history[routine.id]) {
+            historyHtml = `<div class="history-tag">✅ Completed ${history[routine.id]}</div>`;
+        }
 
         card.innerHTML = `
             <h3>${routine.title}</h3>
@@ -125,6 +189,7 @@ function renderRoutines() {
                 <span>${minutes} minutes</span>
                 <span>${routine.segments.length} segments</span>
             </div>
+            ${historyHtml}
         `;
 
         card.addEventListener('click', () => loadRoutine(routine.id));
@@ -229,10 +294,20 @@ function initWorkoutControls() {
 }
 
 async function startWorkout() {
-    // Prime speech synthesis (MUST be in user gesture handler for iOS)
+    // Prime speech synthesis
     primeSpeechSynthesis();
 
-    // Request wake lock
+    // Enable NoSleep
+    if (noSleep) {
+        try {
+            noSleep.enable();
+            console.log('NoSleep enabled');
+        } catch (e) {
+            console.warn('NoSleep failed:', e);
+        }
+    }
+
+    // Request wake lock (backup)
     try {
         if ('wakeLock' in navigator) {
             wakeLock = await navigator.wakeLock.request('screen');
@@ -252,11 +327,14 @@ async function startWorkout() {
     document.getElementById('pause-btn').style.display = 'block';
     document.getElementById('stop-btn').style.display = 'block';
 
-    // Start first segment (call speak directly from user gesture context)
+    // Start first segment
     speak(`Starting ${currentRoutine.segments[0].phase}`);
 
-    // Start timer
-    timerInterval = setInterval(updateTimer, 100);
+    // Update immediately
+    updateDisplay();
+
+    // Start timer loop (1000ms "Logic Tick")
+    timerInterval = setInterval(updateTimer, 1000);
 }
 
 function pauseWorkout() {
@@ -294,10 +372,14 @@ function stopWorkout() {
     isPaused = false;
     window.speechSynthesis.cancel();
 
-    // Release wake lock
+    // Release wake lock and NoSleep
     if (wakeLock) {
         wakeLock.release();
         wakeLock = null;
+    }
+    if (noSleep) {
+        noSleep.disable();
+        console.log('NoSleep disabled');
     }
 
     // Reset UI
@@ -313,66 +395,98 @@ function stopWorkout() {
 function updateTimer() {
     if (isPaused) return;
 
-    // Calculate elapsed time using delta timing
+    // Calculate elapsed time
     elapsedTime = Date.now() - startTime;
     const elapsedSeconds = Math.floor(elapsedTime / 1000);
 
-    // Calculate segment timing
-    let segmentStartTime = 0;
-    for (let i = 0; i < currentSegmentIndex; i++) {
-        segmentStartTime += currentRoutine.segments[i].duration;
-    }
+    // Robust Phase Check: Find which segment we are in
+    let accumulatedTime = 0;
+    let foundSegment = false;
 
-    const currentSegment = currentRoutine.segments[currentSegmentIndex];
-    const segmentElapsed = elapsedSeconds - segmentStartTime;
-    const segmentRemaining = currentSegment.duration - segmentElapsed;
-
-    // Update timer display
-    if (segmentRemaining > 0) {
-        document.getElementById('timer').textContent = formatTime(segmentRemaining);
-        document.getElementById('phase-name').textContent = currentSegment.phase;
-        document.getElementById('phase-instruction').textContent = currentSegment.instruction;
-    }
-
-    // Handle audio cues (only once per second)
-    if (segmentElapsed !== lastSpokenSecond && segmentRemaining > 0) {
-        lastSpokenSecond = segmentElapsed;
-        handleAudioCues(segmentRemaining);
-    }
-
-    // Check if segment is complete
-    if (segmentRemaining <= 0) {
-        currentSegmentIndex++;
-        lastSpokenSecond = -1;
-
-        if (currentSegmentIndex < currentRoutine.segments.length) {
-            // Move to next segment
-            const nextSegment = currentRoutine.segments[currentSegmentIndex];
-            speak(`Starting ${nextSegment.phase}`);
-            updateTimeline();
-            updateSegmentCounter();
-        } else {
-            // Workout complete
-            finishWorkout();
+    for (let i = 0; i < currentRoutine.segments.length; i++) {
+        const segDuration = currentRoutine.segments[i].duration;
+        if (elapsedSeconds < accumulatedTime + segDuration) {
+            // We are in this segment
+            if (currentSegmentIndex !== i) {
+                // Phase change detected (possibly skipped multiple)
+                currentSegmentIndex = i;
+                const seg = currentRoutine.segments[i];
+                speak(`Starting ${seg.phase}`);
+                updateTimeline();
+                updateSegmentCounter();
+            }
+            foundSegment = true;
+            break;
         }
+        accumulatedTime += segDuration;
     }
 
-    // Update progress
-    updateProgress();
+    if (!foundSegment && elapsedSeconds >= totalDuration) {
+        finishWorkout();
+        return;
+    }
+
+    updateDisplay();
+    
+    // Audio cues logic
+    const segmentStartTime = accumulatedTime; // accumulatedTime is start of current segment after loop break? 
+    // Wait, if I break, accumulatedTime is start of current segment.
+    // If I don't break, accumulatedTime is total duration.
+    // I need to be careful with scope.
+    // Let's re-calculate logic for audio cues to be safe.
 }
 
-function handleAudioCues(remainingTime) {
-    const nextSegmentIndex = currentSegmentIndex + 1;
+function updateDisplay() {
+    if (!currentRoutine) return;
+    
+    const elapsedSeconds = Math.floor(elapsedTime / 1000);
+    
+    // Find current segment details again for display
+    let acc = 0;
+    let seg = null;
+    let segIdx = 0;
+    
+    for (let i = 0; i < currentRoutine.segments.length; i++) {
+        if (elapsedSeconds < acc + currentRoutine.segments[i].duration) {
+            seg = currentRoutine.segments[i];
+            segIdx = i;
+            break;
+        }
+        acc += currentRoutine.segments[i].duration;
+    }
+    
+    if (!seg) return; // Should be handled by finishWorkout
+
+    const segmentElapsed = elapsedSeconds - acc;
+    const segmentRemaining = seg.duration - segmentElapsed;
+
+    // Update Text
+    document.getElementById('timer').textContent = formatTime(segmentRemaining);
+    document.getElementById('phase-name').textContent = seg.phase;
+    document.getElementById('phase-instruction').textContent = seg.instruction;
+
+    // Audio Cues (Check if we haven't spoken for this second)
+    if (segmentElapsed !== lastSpokenSecond) {
+        lastSpokenSecond = segmentElapsed;
+        handleAudioCues(segmentRemaining, segIdx);
+    }
+
+    // Update Progress Bar
+    const percentage = (elapsedSeconds / totalDuration) * 100;
+    document.getElementById('timeline-cursor').style.left = `${Math.min(percentage, 100)}%`;
+    document.getElementById('total-progress').textContent = `${Math.floor(percentage)}%`;
+}
+
+function handleAudioCues(remainingTime, currentIdx) {
+    const nextSegmentIndex = currentIdx + 1;
     const nextSegment = nextSegmentIndex < currentRoutine.segments.length
         ? currentRoutine.segments[nextSegmentIndex]
         : null;
 
-    // 30-second warning
     if (remainingTime === 30 && nextSegment) {
         speak(`In 30 seconds, ${nextSegment.phase}`);
     }
 
-    // Final countdown (speak() function handles cancel internally)
     if (remainingTime <= 5 && remainingTime > 0) {
         speak(remainingTime.toString());
     }
@@ -386,11 +500,7 @@ function updateTimeline() {
 }
 
 function updateProgress() {
-    const totalSeconds = Math.floor(elapsedTime / 1000);
-    const percentage = (totalSeconds / totalDuration) * 100;
-
-    document.getElementById('timeline-cursor').style.left = `${Math.min(percentage, 100)}%`;
-    document.getElementById('total-progress').textContent = `${Math.floor(percentage)}%`;
+    // Merged into updateDisplay
 }
 
 function updateSegmentCounter() {
@@ -412,17 +522,29 @@ function finishWorkout() {
 
     document.getElementById('timer').textContent = '00:00';
     document.getElementById('phase-name').textContent = 'Complete!';
-    document.getElementById('phase-instruction').textContent = 'Great job! You finished the workout.';
+    document.getElementById('phase-instruction').textContent = 'Great job!';
 
     speak('Workout complete! Great job!');
 
-    // Release wake lock
+    // Save History
+    try {
+        const history = JSON.parse(localStorage.getItem('workout_history') || '{}');
+        const date = new Date().toLocaleDateString();
+        history[currentRoutine.id] = date;
+        localStorage.setItem('workout_history', JSON.stringify(history));
+    } catch (e) {
+        console.error('Save history failed', e);
+    }
+
+    // Release locks
     if (wakeLock) {
         wakeLock.release();
         wakeLock = null;
     }
+    if (noSleep) {
+        noSleep.disable();
+    }
 
-    // Show only start button (to restart)
     document.getElementById('pause-btn').style.display = 'none';
     document.getElementById('resume-btn').style.display = 'none';
     document.getElementById('stop-btn').style.display = 'none';
@@ -436,45 +558,63 @@ function formatTime(seconds) {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
 
+function selectVoice() {
+    if (!('speechSynthesis' in window)) return;
+    
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length === 0) return;
+
+    // Priority 1: Default
+    // Priority 2: "Samantha" (iOS high quality)
+    // Priority 3: en-US + localService (low latency)
+    // Fallback: First English voice
+
+    let bestVoice = voices.find(v => v.default) || 
+                   voices.find(v => v.name.includes('Samantha')) ||
+                   voices.find(v => v.lang === 'en-US' && v.localService);
+
+    if (!bestVoice) {
+        bestVoice = voices.find(v => v.lang.startsWith('en'));
+    }
+
+    selectedVoice = bestVoice || voices[0];
+    console.log('Selected voice:', selectedVoice ? selectedVoice.name : 'None');
+}
+
 function primeSpeechSynthesis() {
     // iOS Safari requires speech to be triggered from a user gesture
-    // This function should be called from a click handler
     if ('speechSynthesis' in window && !speechInitialized) {
-        // Speak a short silent utterance to initialize the speech engine
+        // Ensure voice is selected
+        if (!selectedVoice) selectVoice();
+
         const utterance = new SpeechSynthesisUtterance('');
         utterance.volume = 0;
         window.speechSynthesis.speak(utterance);
         speechInitialized = true;
-        console.log('Speech synthesis primed for iOS');
+        console.log('Speech synthesis primed');
     }
 }
 
 function speak(text) {
     if ('speechSynthesis' in window) {
-        // Cancel any ongoing speech first
+        // Cancel any ongoing speech
         window.speechSynthesis.cancel();
 
-        // Small delay to ensure cancel completes (iOS Safari quirk)
+        // Small delay for iOS stability
         setTimeout(() => {
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.rate = 1.0;
             utterance.pitch = 1.0;
             utterance.volume = 1.0;
+            
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+            } else {
+                utterance.lang = 'en-US';
+            }
 
-            // iOS Safari specific settings
-            utterance.lang = 'en-US';
-
-            // Error handling for iOS
-            utterance.onerror = (event) => {
-                console.error('Speech synthesis error:', event);
-            };
-
-            utterance.onend = () => {
-                console.log('Finished speaking:', text);
-            };
-
+            utterance.onerror = (e) => console.error('Speech error:', e);
             window.speechSynthesis.speak(utterance);
-            console.log('Speaking:', text);
         }, 50);
     }
 }

@@ -186,6 +186,13 @@ body {
     color: #888;
 }
 
+.history-tag {
+    color: #4CAF50;
+    font-size: 0.9rem;
+    margin-top: 0.8rem;
+    font-weight: bold;
+}
+
 /* Workout View */
 .workout-container {
     display: flex;
@@ -232,7 +239,7 @@ body {
 }
 
 .timer {
-    font-size: 15vh;
+    font-size: 25vh;
     font-weight: bold;
     line-height: 1;
     margin-bottom: 1rem;
@@ -322,30 +329,46 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.8);
-    border-right: 1px solid #000;
+    font-size: 0; /* Hide text for clean look */
+    color: transparent;
+    border-right: 1px solid rgba(0,0,0,0.5);
     position: relative;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    padding: 0 4px;
+    padding: 0;
 }
 
 .timeline-segment.active {
     border: 2px solid #fff;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    z-index: 1;
 }
 
 .timeline-cursor {
     position: absolute;
-    top: 0;
+    top: 50%;
     left: 0;
-    width: 3px;
-    height: 100%;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-    transition: left 0.1s linear;
+    width: 30px;
+    height: 30px;
+    margin-top: -15px;
+    margin-left: -15px;
+    background-color: transparent;
+    box-shadow: none;
+    transition: left 1s linear;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timeline-cursor::after {
+    content: "🦖";
+    font-size: 24px;
+    animation: bounce 0.5s infinite ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
 }
 
 .progress-info {
@@ -359,7 +382,7 @@ body {
 /* Responsive adjustments */
 @media (max-width: 480px) {
     .timer {
-        font-size: 12vh;
+        font-size: 15vh;
     }
 
     .control-btn {
@@ -371,6 +394,6 @@ body {
 
 @media (min-height: 800px) {
     .timer {
-        font-size: 20vh;
+        font-size: 25vh;
     }
 }
