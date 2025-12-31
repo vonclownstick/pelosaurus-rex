@@ -114,7 +114,10 @@ function initKeypad() {
     let pin = '';
 
     keyButtons.forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', (e) => {
+            // Haptic feedback
+            try { if (navigator.vibrate) navigator.vibrate(15); } catch(e){}
+
             const value = button.dataset.value;
 
             if (value === 'clear') {
@@ -133,6 +136,7 @@ function initKeypad() {
             }
         });
     });
+// ... (rest of function)
 
     async function authenticate(enteredPin) {
         try {
@@ -213,19 +217,24 @@ function renderRoutines() {
             ${historyHtml}
         `;
 
-        card.addEventListener('click', () => loadRoutine(routine.id));
+        card.addEventListener('click', () => {
+            try { if (navigator.vibrate) navigator.vibrate(15); } catch(e){}
+            loadRoutine(routine.id);
+        });
         container.appendChild(card);
     });
 }
 
 function initLogout() {
     document.getElementById('logout-btn').addEventListener('click', () => {
+        try { if (navigator.vibrate) navigator.vibrate(15); } catch(e){}
         showView('view-login');
     });
 }
 
 // ===== WORKOUT VIEW =====
-function loadRoutine(routineId) {
+// ... (start of loadRoutine)
+
     currentRoutine = routines.find(r => r.id === routineId);
     if (!currentRoutine) return;
 
@@ -298,11 +307,12 @@ function initWorkoutControls() {
     });
 
     // Add new listeners
-    document.getElementById('start-btn').addEventListener('click', startWorkout);
-    document.getElementById('pause-btn').addEventListener('click', pauseWorkout);
-    document.getElementById('resume-btn').addEventListener('click', resumeWorkout);
-    document.getElementById('stop-btn').addEventListener('click', stopWorkout);
+    document.getElementById('start-btn').addEventListener('click', () => { try { if (navigator.vibrate) navigator.vibrate(15); } catch(e){} startWorkout(); });
+    document.getElementById('pause-btn').addEventListener('click', () => { try { if (navigator.vibrate) navigator.vibrate(15); } catch(e){} pauseWorkout(); });
+    document.getElementById('resume-btn').addEventListener('click', () => { try { if (navigator.vibrate) navigator.vibrate(15); } catch(e){} resumeWorkout(); });
+    document.getElementById('stop-btn').addEventListener('click', () => { try { if (navigator.vibrate) navigator.vibrate(15); } catch(e){} stopWorkout(); });
     document.getElementById('back-btn').addEventListener('click', () => {
+        try { if (navigator.vibrate) navigator.vibrate(15); } catch(e){}
         if (timerInterval) {
             if (confirm('Are you sure you want to exit? Your progress will be lost.')) {
                 stopWorkout();
@@ -609,17 +619,6 @@ function selectVoice() {
     selectedVoice = bestVoice || voices[0];
     console.log('Selected voice:', selectedVoice ? selectedVoice.name : 'None');
 }
-
-// Global Interaction Feedback
-document.addEventListener('click', (e) => {
-    // Check if the clicked element is a button or interactive
-    if (e.target.closest('button') || e.target.closest('.routine-card') || e.target.closest('.key-btn')) {
-        // Haptic Feedback
-        if (navigator.vibrate) {
-            navigator.vibrate(15); // Short, sharp tick
-        }
-    }
-});
 
 function primeSpeechSynthesis() {
     // iOS Safari requires speech to be triggered from a user gesture
