@@ -86,6 +86,9 @@ body {
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s;
+    /* iOS Safari touch optimization */
+    -webkit-touch-callout: none;
+    touch-action: manipulation; /* Prevents double-tap zoom, ensures immediate response */
 }
 
 .key-btn:active {

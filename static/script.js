@@ -113,8 +113,11 @@ function initKeypad() {
     const errorMsg = document.getElementById('login-error');
     let pin = '';
 
+    // AIDEV-NOTE: iOS Safari requires both touch and click handlers for reliable button interaction
     keyButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
+        const handleKeyPress = (e) => {
+            e.preventDefault(); // Prevent duplicate events
+
             // Haptic feedback
             try { if (navigator.vibrate) navigator.vibrate(15); } catch(e){}
 
@@ -134,7 +137,11 @@ function initKeypad() {
                     pinInput.value = pin;
                 }
             }
-        });
+        };
+
+        // Add both touch and click listeners for iOS compatibility
+        button.addEventListener('touchend', handleKeyPress);
+        button.addEventListener('click', handleKeyPress);
     });
 // ... (rest of function)
 
@@ -233,8 +240,7 @@ function initLogout() {
 }
 
 // ===== WORKOUT VIEW =====
-// ... (start of loadRoutine)
-
+function loadRoutine(routineId) {
     currentRoutine = routines.find(r => r.id === routineId);
     if (!currentRoutine) return;
 
