@@ -246,6 +246,12 @@ body {
     font-weight: bold;
     line-height: 1;
     margin-bottom: 1rem;
+    /* AIDEV-NOTE: Prevent horizontal jumping as digits change */
+    font-variant-numeric: tabular-nums; /* All digits same width */
+    font-feature-settings: "tnum"; /* Tabular numbers for fonts that support it */
+    letter-spacing: 0; /* Tight spacing for better centering */
+    min-width: 5ch; /* Reserve space for "MM:SS" format - prevents container resize */
+    display: inline-block; /* Allow centering */
 }
 
 .phase-instruction {
@@ -393,6 +399,7 @@ button:active, .routine-card:active, .key-btn:active {
 @media (max-width: 480px) {
     .timer {
         font-size: 15vh;
+        min-width: 4.5ch; /* Slightly smaller for mobile but still prevents jump */
     }
 
     .control-btn {

@@ -631,7 +631,9 @@ function finishWorkout() {
 function formatTime(seconds) {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    // Only pad minutes if >= 10, always pad seconds
+    const minsStr = mins >= 10 ? mins.toString() : mins.toString();
+    return `${minsStr}:${secs.toString().padStart(2, '0')}`;
 }
 
 function selectVoice() {
