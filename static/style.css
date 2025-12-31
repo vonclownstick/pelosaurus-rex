@@ -344,8 +344,9 @@ body {
 }
 
 .timeline-cursor {
+    box-sizing: content-box; /* Crucial for CSS triangle */
     position: absolute;
-    top: -20px; /* Position above bars */
+    top: -14px; /* Position tip just touching top of bars (15px height - 1px overlap) */
     left: 0;
     width: 0;
     height: 0;
