@@ -17,28 +17,43 @@ let selectedVoice = null;
 // Constants
 const PIN_EXPIRY_DAYS = 7;
 
+// Global error handler for debugging
+window.addEventListener('error', (e) => {
+    console.error('Global error:', e.message, 'at', e.filename, ':', e.lineno);
+});
+
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOMContentLoaded fired - initializing app');
+
     // Initialize NoSleep
     if (typeof NoSleep !== 'undefined') {
         noSleep = new NoSleep();
+        console.log('NoSleep initialized');
+    } else {
+        console.warn('NoSleep not available');
     }
 
     // Check auth
+    console.log('Checking authentication...');
     if (checkAuth()) {
+        console.log('User authenticated, loading dashboard');
         loadDashboard();
     } else {
+        console.log('User not authenticated, showing login');
         showView('view-login');
     }
-    
+
     initKeypad();
     initLogout();
     initSpeechResume();
-    
+
     // Wait for voices to load
     if ('speechSynthesis' in window) {
         window.speechSynthesis.onvoiceschanged = selectVoice;
     }
+
+    console.log('App initialization complete');
 });
 
 function checkAuth() {
@@ -52,9 +67,6 @@ function checkAuth() {
     }
     return false;
 }
-
-// Variable to store the wake lock sentinel
-let wakeLock = null;
 
 // Function to request the wake lock
 async function requestWakeLock() {
@@ -108,15 +120,27 @@ function showView(viewId) {
 
 // ===== LOGIN VIEW =====
 function initKeypad() {
+    console.log('initKeypad() called');
     const pinInput = document.getElementById('pin-input');
     const keyButtons = document.querySelectorAll('.key-btn');
     const errorMsg = document.getElementById('login-error');
     let pin = '';
 
+    console.log('Found', keyButtons.length, 'key buttons');
+
     // AIDEV-NOTE: iOS Safari requires both touch and click handlers for reliable button interaction
-    keyButtons.forEach(button => {
+    let isHandling = false; // Prevent duplicate event firing
+
+    keyButtons.forEach((button, index) => {
+        console.log('Attaching listeners to button', index, ':', button.dataset.value);
         const handleKeyPress = (e) => {
-            e.preventDefault(); // Prevent duplicate events
+            // Prevent duplicate firing from both touch and click
+            if (isHandling) return;
+            isHandling = true;
+            setTimeout(() => { isHandling = false; }, 300);
+
+            e.preventDefault();
+            console.log('Key pressed:', button.dataset.value); // Debug log
 
             // Haptic feedback
             try { if (navigator.vibrate) navigator.vibrate(15); } catch(e){}
@@ -127,26 +151,34 @@ function initKeypad() {
                 pin = '';
                 pinInput.value = '';
                 errorMsg.textContent = '';
+                console.log('PIN cleared');
             } else if (value === 'enter') {
                 if (pin.length > 0) {
+                    console.log('Attempting authentication with PIN length:', pin.length);
                     authenticate(pin);
+                } else {
+                    console.log('PIN too short, length:', pin.length);
                 }
             } else {
                 if (pin.length < 4) {
                     pin += value;
                     pinInput.value = pin;
+                    console.log('PIN now:', pin.length, 'digits');
+                } else {
+                    console.log('PIN already at max length');
                 }
             }
         };
 
         // Add both touch and click listeners for iOS compatibility
-        button.addEventListener('touchend', handleKeyPress);
+        button.addEventListener('touchend', handleKeyPress, { passive: false });
         button.addEventListener('click', handleKeyPress);
     });
-// ... (rest of function)
 
     async function authenticate(enteredPin) {
+        console.log('authenticate() called with PIN length:', enteredPin.length);
         try {
+            console.log('Sending POST to /api/auth...');
             const response = await fetch('/api/auth', {
                 method: 'POST',
                 headers: {
@@ -155,7 +187,10 @@ function initKeypad() {
                 body: JSON.stringify({ pin: enteredPin })
             });
 
+            console.log('Auth response status:', response.status);
+
             if (response.ok) {
+                console.log('Authentication successful!');
                 // Store auth token
                 const expiry = Date.now() + (PIN_EXPIRY_DAYS * 24 * 60 * 60 * 1000);
                 localStorage.setItem('auth_token', JSON.stringify({ expiry: expiry }));
@@ -165,13 +200,14 @@ function initKeypad() {
                 errorMsg.textContent = '';
                 loadDashboard();
             } else {
+                console.log('Authentication failed - invalid PIN');
                 errorMsg.textContent = 'Invalid PIN. Try again.';
                 pin = '';
                 pinInput.value = '';
             }
         } catch (error) {
-            errorMsg.textContent = 'Connection error. Try again.';
             console.error('Auth error:', error);
+            errorMsg.textContent = 'Connection error. Try again.';
         }
     }
 }
