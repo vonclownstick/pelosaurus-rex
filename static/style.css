@@ -314,7 +314,7 @@ body {
 
 .timeline-container {
     position: relative;
-    margin: 1.5rem 0;
+    margin: 2.5rem 0 1.5rem 0; /* Increased top margin for arrow */
 }
 
 .timeline {
@@ -345,15 +345,19 @@ body {
 
 .timeline-cursor {
     position: absolute;
-    top: 0;
+    top: -20px; /* Position above bars */
     left: 0;
-    width: 4px; /* Slightly thicker line */
-    height: 100%;
-    margin-left: -2px; /* Center on point */
-    background-color: #fff;
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 15px solid #fff;
+    margin-left: -10px; /* Center on point */
+    background-color: transparent;
+    box-shadow: none;
     transition: left 1s linear;
     z-index: 2;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
 }
 
 /* Fixed Dino Watcher */
