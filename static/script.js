@@ -53,20 +53,41 @@ function checkAuth() {
     return false;
 }
 
+// Variable to store the wake lock sentinel
+let wakeLock = null;
+
+// Function to request the wake lock
+async function requestWakeLock() {
+    try {
+        if ('wakeLock' in navigator) {
+            wakeLock = await navigator.wakeLock.request('screen');
+            console.log('Wake Lock is active!');
+            
+            // Listen for release
+            wakeLock.addEventListener('release', () => {
+                console.log('Wake Lock released');
+                wakeLock = null; // Important: Clear sentinel so we can re-request
+            });
+        } else {
+            console.warn('Wake Lock API not supported');
+        }
+    } catch (err) {
+        console.error(`${err.name}, ${err.message}`);
+    }
+}
+
 // Handle iOS Safari speech resumption and display catch-up
 function initSpeechResume() {
     document.addEventListener('visibilitychange', async () => {
-        if (!document.hidden) {
+        if (document.visibilityState === 'visible') {
             // Force display update to snap to correct time
             if (timerInterval && !isPaused) {
                 updateDisplay();
             }
 
-            // Re-request wake lock
-            if (!wakeLock && 'wakeLock' in navigator) {
-                try {
-                    wakeLock = await navigator.wakeLock.request('screen');
-                } catch (e) { console.log('Wake lock re-request failed', e); }
+            // Re-request wake lock if we are in a workout
+            if (timerInterval && !isPaused && !wakeLock) {
+                await requestWakeLock();
             }
 
             // Resume speech
@@ -297,7 +318,7 @@ async function startWorkout() {
     // Prime speech synthesis
     primeSpeechSynthesis();
 
-    // Enable NoSleep
+    // Enable NoSleep (Nuclear fallback)
     if (noSleep) {
         try {
             noSleep.enable();
@@ -307,14 +328,8 @@ async function startWorkout() {
         }
     }
 
-    // Request wake lock (backup)
-    try {
-        if ('wakeLock' in navigator) {
-            wakeLock = await navigator.wakeLock.request('screen');
-        }
-    } catch (err) {
-        console.log('Wake lock not supported or failed:', err);
-    }
+    // Request modern Wake Lock
+    await requestWakeLock();
 
     // Initialize timing
     startTime = Date.now();
@@ -346,6 +361,12 @@ function pauseWorkout() {
         document.getElementById('resume-btn').style.display = 'block';
 
         window.speechSynthesis.cancel();
+        
+        // Release wake lock on pause to save battery
+        if (wakeLock) {
+            wakeLock.release();
+            wakeLock = null;
+        }
     }
 }
 
@@ -360,6 +381,9 @@ function resumeWorkout() {
 
         document.getElementById('resume-btn').style.display = 'none';
         document.getElementById('pause-btn').style.display = 'block';
+        
+        // Re-request wake lock
+        requestWakeLock();
     }
 }
 
