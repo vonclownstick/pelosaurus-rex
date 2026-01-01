@@ -137,19 +137,30 @@ body {
     border: none;
     font-size: 48px;
     cursor: pointer;
-    padding: 8px;
+    padding: 12px;
     line-height: 1;
     position: relative;
     /* Increase touch target for iOS */
-    min-width: 60px;
-    min-height: 60px;
+    min-width: 70px;
+    min-height: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Remove iOS default button styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    /* Ensure clickability on iOS */
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .menu-trigger:active {
     transform: scale(0.95);
+    opacity: 0.7;
 }
 
 /* Dropdown menu */

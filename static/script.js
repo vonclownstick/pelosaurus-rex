@@ -86,18 +86,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuTrigger = document.getElementById('menu-trigger');
     const dropdownMenu = document.getElementById('dropdown-menu');
 
-    menuTrigger?.addEventListener('click', (e) => {
+    // Toggle menu function (works for both click and touch)
+    const toggleMenu = (e) => {
+        e.preventDefault();
         e.stopPropagation();
         const isVisible = dropdownMenu.style.display === 'block';
         dropdownMenu.style.display = isVisible ? 'none' : 'block';
-    });
+        console.log('Menu toggled:', isVisible ? 'closed' : 'opened');
+    };
 
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
+    // Add both click and touchend for iOS compatibility
+    if (menuTrigger) {
+        menuTrigger.addEventListener('click', toggleMenu);
+        menuTrigger.addEventListener('touchend', toggleMenu);
+    }
+
+    // Close menu when clicking/touching outside
+    const closeMenu = (e) => {
         if (dropdownMenu && !menuTrigger?.contains(e.target) && !dropdownMenu.contains(e.target)) {
             dropdownMenu.style.display = 'none';
         }
-    });
+    };
+    document.addEventListener('click', closeMenu);
+    document.addEventListener('touchend', closeMenu);
 
     // Settings modal handlers
     const settingsBtn = document.getElementById('settings-btn');
