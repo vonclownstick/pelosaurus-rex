@@ -13,13 +13,13 @@
     <meta name="theme-color" content="#1a1a1a">
 
     <!-- iOS-specific PWA meta tags -->
-    <link rel="apple-touch-icon" href="/static/icons/dino-192.png">
+    <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
     <meta name="apple-mobile-web-app-title" content="Pelosaurus">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
 
     <link rel="stylesheet" href="/static/style.css?v=timer-fix">
 </head>
 <body>
-    <div id="fixed-dino">🦖</div>
     <!-- View 1: Login -->
     <div id="view-login" class="view active">
         <div class="login-container">
@@ -49,10 +49,11 @@
     <div id="view-dashboard" class="view">
         <div class="dashboard-container">
             <div class="dashboard-header">
-                <h1><span class="dino-icon">🦖</span> Choose a Workout</h1>
-                <div class="header-buttons">
-                    <button id="settings-btn" class="settings-btn">⚙️</button>
-                    <button id="logout-btn" class="logout-btn">Logout</button>
+                <h1>Choose a Workout</h1>
+                <button id="menu-trigger" class="menu-trigger">🦖</button>
+                <div id="dropdown-menu" class="dropdown-menu" style="display: none;">
+                    <button id="settings-btn" class="menu-item">⚙️ Settings</button>
+                    <button id="logout-btn" class="menu-item">🚪 Logout</button>
                 </div>
             </div>
             <div id="routines-list" class="routines-list">

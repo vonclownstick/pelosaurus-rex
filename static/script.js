@@ -82,12 +82,30 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(err => console.error('Failed to load config:', err));
 
+    // Menu trigger (dinosaur button)
+    const menuTrigger = document.getElementById('menu-trigger');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+
+    menuTrigger?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isVisible = dropdownMenu.style.display === 'block';
+        dropdownMenu.style.display = isVisible ? 'none' : 'block';
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (dropdownMenu && !menuTrigger?.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            dropdownMenu.style.display = 'none';
+        }
+    });
+
     // Settings modal handlers
     const settingsBtn = document.getElementById('settings-btn');
     const settingsModal = document.getElementById('settings-modal');
     const closeModalBtn = document.getElementById('close-modal-btn');
 
     settingsBtn?.addEventListener('click', () => {
+        dropdownMenu.style.display = 'none'; // Close dropdown when opening settings
         settingsModal.style.display = 'flex';
         // Load Spotify status
         if (localStorage.getItem('spotify_access_token')) {
