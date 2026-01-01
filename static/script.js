@@ -520,6 +520,32 @@ async function startWorkout() {
 
     // Start timer loop (1000ms "Logic Tick")
     timerInterval = setInterval(updateTimer, 1000);
+
+    // Start smooth cursor animation loop (60fps for no lag)
+    updateCursorPosition();
+}
+
+function updateCursorPosition() {
+    if (!timerInterval || isPaused) {
+        // Not running or paused, stop animation
+        return;
+    }
+
+    // Calculate current position based on real time
+    const currentElapsedTime = Date.now() - startTime;
+    const totalDurationMs = totalDuration * 1000;
+    const percentage = (currentElapsedTime / totalDurationMs) * 100;
+
+    // Update cursor position smoothly
+    const cursor = document.getElementById('timeline-cursor');
+    if (cursor) {
+        cursor.style.left = `${Math.min(percentage, 100)}%`;
+    }
+
+    // Continue animation loop
+    if (timerInterval && !isPaused) {
+        requestAnimationFrame(updateCursorPosition);
+    }
 }
 
 function pauseWorkout() {
@@ -568,6 +594,9 @@ function resumeWorkout() {
 
         // Re-request wake lock
         requestWakeLock();
+
+        // Restart cursor animation
+        updateCursorPosition();
     }
 }
 
@@ -679,9 +708,8 @@ function updateDisplay() {
         handleAudioCues(segmentRemaining, segIdx);
     }
 
-    // Update Progress Bar
+    // Update Progress Bar percentage text (cursor position updated by animation loop)
     const percentage = (elapsedSeconds / totalDuration) * 100;
-    document.getElementById('timeline-cursor').style.left = `${Math.min(percentage, 100)}%`;
     document.getElementById('total-progress').textContent = `${Math.floor(percentage)}%`;
 }
 
