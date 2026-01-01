@@ -13,6 +13,8 @@ let elapsedTime = 0;
 let lastSpokenSecond = -1;
 let speechInitialized = false;
 let selectedVoice = null;
+let isOnline = navigator.onLine;
+let spotifyEnabled = false;  // Set to true when Spotify is configured
 
 // Constants
 const PIN_EXPIRY_DAYS = 7;
@@ -52,6 +54,73 @@ document.addEventListener('DOMContentLoaded', () => {
     if ('speechSynthesis' in window) {
         window.speechSynthesis.onvoiceschanged = selectVoice;
     }
+
+    // Online/Offline detection
+    window.addEventListener('online', () => {
+        console.log('App is online');
+        isOnline = true;
+        updateOnlineUI();
+    });
+
+    window.addEventListener('offline', () => {
+        console.log('App is offline');
+        isOnline = false;
+        updateOnlineUI();
+    });
+
+    // Initialize online state
+    updateOnlineUI();
+
+    // Check if Spotify is enabled
+    fetch('/api/config')
+        .then(res => res.json())
+        .then(config => {
+            if (config.spotifyEnabled && localStorage.getItem('spotify_access_token')) {
+                spotifyEnabled = true;
+                updateOnlineUI();
+            }
+        })
+        .catch(err => console.error('Failed to load config:', err));
+
+    // Settings modal handlers
+    const settingsBtn = document.getElementById('settings-btn');
+    const settingsModal = document.getElementById('settings-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+
+    settingsBtn?.addEventListener('click', () => {
+        settingsModal.style.display = 'flex';
+        // Load Spotify status
+        if (localStorage.getItem('spotify_access_token')) {
+            document.getElementById('spotify-connected').style.display = 'block';
+            document.getElementById('spotify-connect-btn').style.display = 'none';
+            const savedUri = localStorage.getItem('spotify_playlist_uri');
+            if (savedUri) {
+                document.getElementById('playlist-uri').value = savedUri;
+            }
+        }
+    });
+
+    closeModalBtn?.addEventListener('click', () => {
+        settingsModal.style.display = 'none';
+    });
+
+    // Spotify connect button
+    document.getElementById('spotify-connect-btn')?.addEventListener('click', () => {
+        initiateSpotifyAuth();  // From spotify.js
+    });
+
+    // Save playlist button
+    document.getElementById('save-playlist-btn')?.addEventListener('click', () => {
+        const uri = document.getElementById('playlist-uri').value;
+        if (uri && uri.startsWith('spotify:playlist:')) {
+            localStorage.setItem('spotify_playlist_uri', uri);
+            spotifyEnabled = true;
+            updateOnlineUI();
+            alert('Playlist saved!');
+        } else {
+            alert('Invalid playlist URI. Format: spotify:playlist:...');
+        }
+    });
 
     console.log('App initialization complete');
 });
@@ -100,6 +169,16 @@ function initSpeechResume() {
             // Re-request wake lock if we are in a workout
             if (timerInterval && !isPaused && !wakeLock) {
                 await requestWakeLock();
+            }
+
+            // ENHANCEMENT: Re-enable NoSleep as fallback on iOS
+            if (timerInterval && !isPaused && noSleep) {
+                try {
+                    noSleep.enable();
+                    console.log('NoSleep re-enabled after visibility change');
+                } catch (e) {
+                    console.warn('NoSleep re-enable failed:', e);
+                }
             }
 
             // Resume speech
@@ -400,6 +479,16 @@ async function startWorkout() {
     // Update immediately
     updateDisplay();
 
+    // Start Spotify playback if enabled and online
+    if (isOnline && spotifyEnabled) {
+        const playlistUri = localStorage.getItem('spotify_playlist_uri');
+        if (playlistUri) {
+            playSpotifyPlaylist(playlistUri).catch(err => {
+                console.error('Failed to start Spotify:', err);
+            });
+        }
+    }
+
     // Start timer loop (1000ms "Logic Tick")
     timerInterval = setInterval(updateTimer, 1000);
 }
@@ -413,7 +502,14 @@ function pauseWorkout() {
         document.getElementById('resume-btn').style.display = 'block';
 
         window.speechSynthesis.cancel();
-        
+
+        // Pause Spotify
+        if (spotifyEnabled) {
+            pauseSpotifyPlayback().catch(err => {
+                console.error('Failed to pause Spotify:', err);
+            });
+        }
+
         // Release wake lock on pause to save battery
         if (wakeLock) {
             wakeLock.release();
@@ -433,7 +529,14 @@ function resumeWorkout() {
 
         document.getElementById('resume-btn').style.display = 'none';
         document.getElementById('pause-btn').style.display = 'block';
-        
+
+        // Resume Spotify
+        if (spotifyEnabled) {
+            resumeSpotifyPlayback().catch(err => {
+                console.error('Failed to resume Spotify:', err);
+            });
+        }
+
         // Re-request wake lock
         requestWakeLock();
     }
@@ -602,6 +705,13 @@ function finishWorkout() {
 
     speak('Workout complete! Great job!');
 
+    // Stop Spotify
+    if (spotifyEnabled) {
+        pauseSpotifyPlayback().catch(err => {
+            console.error('Failed to stop Spotify:', err);
+        });
+    }
+
     // Save History
     try {
         const history = JSON.parse(localStorage.getItem('workout_history') || '{}');
@@ -699,5 +809,17 @@ function speak(text) {
             utterance.onerror = (e) => console.error('Speech error:', e);
             window.speechSynthesis.speak(utterance);
         }, 50);
+    }
+}
+
+function updateOnlineUI() {
+    const musicBtn = document.getElementById('music-btn');
+    if (!musicBtn) return;  // Music button doesn't exist yet (Phase 3)
+
+    // Hide music button if offline OR Spotify not enabled
+    if (!isOnline || !spotifyEnabled) {
+        musicBtn.style.display = 'none';
+    } else {
+        musicBtn.style.display = 'block';
     }
 }

@@ -6,6 +6,16 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>Pelosaurus Rex</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" href="/static/icons/dino-192.png">
+    <meta name="theme-color" content="#1a1a1a">
+
+    <!-- iOS-specific PWA meta tags -->
+    <link rel="apple-touch-icon" href="/static/icons/dino-192.png">
+    <meta name="apple-mobile-web-app-title" content="Pelosaurus">
+
     <link rel="stylesheet" href="/static/style.css?v=timer-fix">
 </head>
 <body>
@@ -40,7 +50,10 @@
         <div class="dashboard-container">
             <div class="dashboard-header">
                 <h1><span class="dino-icon">🦖</span> Choose a Workout</h1>
-                <button id="logout-btn" class="logout-btn">Logout</button>
+                <div class="header-buttons">
+                    <button id="settings-btn" class="settings-btn">⚙️</button>
+                    <button id="logout-btn" class="logout-btn">Logout</button>
+                </div>
             </div>
             <div id="routines-list" class="routines-list">
                 <!-- Workout cards will be dynamically inserted here -->
@@ -72,6 +85,7 @@
                 <button id="pause-btn" class="control-btn pause" style="display:none;">Pause</button>
                 <button id="resume-btn" class="control-btn resume" style="display:none;">Resume</button>
                 <button id="stop-btn" class="control-btn stop" style="display:none;">Stop</button>
+                <button id="music-btn" class="control-btn music" style="display:none;">🎵 Music</button>
             </div>
 
             <div class="timeline-container">
@@ -88,7 +102,34 @@
         </div>
     </div>
 
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h2>Spotify Settings</h2>
+            <button id="spotify-connect-btn" class="btn-primary">Connect Spotify</button>
+            <div id="spotify-connected" style="display:none;">
+                <p>✅ Connected to Spotify</p>
+                <label for="playlist-uri">Playlist URI:</label>
+                <input type="text" id="playlist-uri" placeholder="spotify:playlist:...">
+                <button id="save-playlist-btn" class="btn-primary">Save</button>
+            </div>
+            <button id="close-modal-btn" class="btn-secondary">Close</button>
+        </div>
+    </div>
+
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/static/sw.js')
+            .then(reg => console.log('Service Worker registered!', reg))
+            .catch(err => console.error('Service Worker registration failed:', err));
+        });
+      }
+    </script>
+
     <script src="/static/NoSleep.min.js"></script>
+    <script src="/static/spotify.js"></script>
     <script src="/static/script.js?v=touch-fix"></script>
 </body>
 </html>

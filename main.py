@@ -17,6 +17,9 @@ templates = Jinja2Templates(directory="templates")
 # Get PIN from environment variable (default "1234" for development)
 APP_PIN = os.getenv("APP_PIN", "1234")
 
+# Get Spotify config from environment (optional)
+SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID", "")
+
 
 class AuthRequest(BaseModel):
     pin: str
@@ -26,6 +29,17 @@ class AuthRequest(BaseModel):
 async def root(request: Request):
     """Serve the main application page"""
     return templates.TemplateResponse("index.html", {"request": request})
+
+
+@app.get("/manifest.json")
+async def get_manifest():
+    """Serve PWA manifest"""
+    try:
+        with open("manifest.json", "r") as f:
+            manifest = json.load(f)
+        return manifest
+    except FileNotFoundError:
+        raise HTTPException(status_code=500, detail="Manifest file not found")
 
 
 @app.get("/api/routines")
@@ -48,6 +62,21 @@ async def authenticate(auth: AuthRequest):
         return {"status": "success", "message": "Authentication successful"}
     else:
         raise HTTPException(status_code=401, detail="Invalid PIN")
+
+
+@app.get("/callback")
+async def spotify_callback(request: Request):
+    """Handle Spotify OAuth callback"""
+    return templates.TemplateResponse("index.html", {"request": request})
+
+
+@app.get("/api/config")
+async def get_config():
+    """Return Spotify client ID from environment"""
+    return {
+        "spotifyClientId": SPOTIFY_CLIENT_ID,
+        "spotifyEnabled": bool(SPOTIFY_CLIENT_ID)
+    }
 
 
 @app.get("/health")
